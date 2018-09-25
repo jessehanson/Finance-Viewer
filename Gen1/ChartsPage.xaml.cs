@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -14,59 +13,22 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Gen1
 {
-    public class FinancialData
-    {
-        public double High { get; set; }
-        public double Low { get; set; }
-        public double Open { get; set; }
-        public double Close { get; set; }
-        public DateTime Date { get; set; }
-    }
-
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class ChartsPage : Page
     {
-        public MainPage()
+        public ChartsPage()
         {
             this.InitializeComponent();
 
-            LoadedFrame.Navigate(typeof(ChartsPage));
-
-            //GenerateChart("1m");
+            GenerateChart("1m");
         }
 
-        private void ChartsButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadedFrame.Navigate(typeof(ChartsPage));
-        }
-
-        private void FundamentalsButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadedFrame.Navigate(typeof(FundamentalsPage));
-        }
-
-        private void StrategiesButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadedFrame.Navigate(typeof(StrategiesPage));
-        }
-
-        private void NewsButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadedFrame.Navigate(typeof(NewsPage));
-        }
-
-        private void GoogleButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadedFrame.Navigate(typeof(GooglePage));
-        }
-
-        /*
         private async void GenerateChart(string duration)
         {
             this.OhlcChart.DataContext = "";
@@ -81,7 +43,7 @@ namespace Gen1
             {
                 DateTime nextDate = new DateTime();
 
-                if(DateTime.TryParse(dataPoint.date, out nextDate))
+                if (DateTime.TryParse(dataPoint.date, out nextDate))
                 {
                     newData.Add(new FinancialData()
                     {
@@ -110,30 +72,30 @@ namespace Gen1
         }
 
         private void Button_1_Day_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("1d");   }
+        { this.GenerateChart("1d"); }
 
         private void Button_1_Month_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("1m");   }
+        { this.GenerateChart("1m"); }
 
         private void Button_3_Month_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("3m");   }
+        { this.GenerateChart("3m"); }
 
         private void Button_6_Month_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("6m");   }
+        { this.GenerateChart("6m"); }
 
         private void Button_YTD_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("ytd");  }
+        { this.GenerateChart("ytd"); }
 
         private void Button_1_Year_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("1y");   }
+        { this.GenerateChart("1y"); }
 
         private void Button_2_Year_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("2y");   }
+        { this.GenerateChart("2y"); }
 
         private void Button_5_Year_Click(object sender, RoutedEventArgs e)
-        {   this.GenerateChart("5y");   }
+        { this.GenerateChart("5y"); }
 
-    */
+
 
     }
 }
