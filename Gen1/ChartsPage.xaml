@@ -9,100 +9,131 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Background="Black">
+    <Grid Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-        <ComboBox Name="TickerSelector" Margin="50,30,0,0" Width="125" >
-            <ComboBoxItem Content="MSFT" IsSelected="True"/>
-            <ComboBoxItem Content="AAPL" />
-            <ComboBoxItem Content="NKE" />
-            <ComboBoxItem Content="NFLX" />
-        </ComboBox>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Vertical" Grid.Column="0">
 
-        <StackPanel Orientation="Horizontal">
-            <telerikChart:RadCartesianChart x:Name="OhlcChart" Width="350" Height="350" PaletteName="DefaultLightSelected" HorizontalAlignment="Left" Margin="40">
+            <ComboBox Name="TickerSelector" Margin="50,30,0,0" Width="125" >
+                <ComboBoxItem Content="MSFT" IsSelected="True"/>
+                <ComboBoxItem Content="AAPL" />
+                <ComboBoxItem Content="NKE" />
+                <ComboBoxItem Content="NFLX" />
+            </ComboBox>
 
-                <telerikChart:RadCartesianChart.Indicators>
-                    <telerikChart:BollingerBandsIndicator ItemsSource="{Binding}" Period="2" StandardDeviations="2" Stroke="White" StrokeThickness="2" LowerBandStroke="Red">
-                        <telerikChart:BollingerBandsIndicator.ValueBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Close"/>
-                        </telerikChart:BollingerBandsIndicator.ValueBinding>
-                        <telerikChart:BollingerBandsIndicator.CategoryBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Date"/>
-                        </telerikChart:BollingerBandsIndicator.CategoryBinding>
-                    </telerikChart:BollingerBandsIndicator>
-                </telerikChart:RadCartesianChart.Indicators>
+            <StackPanel Orientation="Horizontal">
+                <telerikChart:RadCartesianChart x:Name="OhlcChart" Width="350" Height="350" PaletteName="DefaultLightSelected" HorizontalAlignment="Left" Margin="40">
 
-                <telerikChart:RadCartesianChart.VerticalAxis>
-                    <telerikChart:LinearAxis/>
-                </telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:RadCartesianChart.HorizontalAxis>
-                    <telerikChart:DateTimeCategoricalAxis LabelFormat="{}{0,0:dd/MM}"/>
-                </telerikChart:RadCartesianChart.HorizontalAxis>
+                    <telerikChart:RadCartesianChart.Indicators>
+                        <telerikChart:BollingerBandsIndicator ItemsSource="{Binding}" Period="2" StandardDeviations="2" Stroke="White" StrokeThickness="2" LowerBandStroke="Red">
+                            <telerikChart:BollingerBandsIndicator.ValueBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Close"/>
+                            </telerikChart:BollingerBandsIndicator.ValueBinding>
+                            <telerikChart:BollingerBandsIndicator.CategoryBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Date"/>
+                            </telerikChart:BollingerBandsIndicator.CategoryBinding>
+                        </telerikChart:BollingerBandsIndicator>
+                    </telerikChart:RadCartesianChart.Indicators>
 
-                <telerikChart:RadCartesianChart.Series>
-                    <telerikChart:CandlestickSeries ItemsSource="{Binding}">
-                        <telerikChart:CandlestickSeries.CategoryBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Date"/>
-                        </telerikChart:CandlestickSeries.CategoryBinding>
-                        <telerikChart:CandlestickSeries.HighBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="High"/>
-                        </telerikChart:CandlestickSeries.HighBinding>
-                        <telerikChart:CandlestickSeries.LowBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Low"/>
-                        </telerikChart:CandlestickSeries.LowBinding>
-                        <telerikChart:CandlestickSeries.OpenBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Open"/>
-                        </telerikChart:CandlestickSeries.OpenBinding>
-                        <telerikChart:CandlestickSeries.CloseBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Close"/>
-                        </telerikChart:CandlestickSeries.CloseBinding>
-                    </telerikChart:CandlestickSeries>
-                </telerikChart:RadCartesianChart.Series>
+                    <telerikChart:RadCartesianChart.VerticalAxis>
+                        <telerikChart:LinearAxis/>
+                    </telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:RadCartesianChart.HorizontalAxis>
+                        <telerikChart:DateTimeCategoricalAxis LabelFormat="{}{0,0:dd/MM}"/>
+                    </telerikChart:RadCartesianChart.HorizontalAxis>
 
-            </telerikChart:RadCartesianChart>
+                    <telerikChart:RadCartesianChart.Series>
+                        <telerikChart:CandlestickSeries ItemsSource="{Binding}">
+                            <telerikChart:CandlestickSeries.CategoryBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Date"/>
+                            </telerikChart:CandlestickSeries.CategoryBinding>
+                            <telerikChart:CandlestickSeries.HighBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="High"/>
+                            </telerikChart:CandlestickSeries.HighBinding>
+                            <telerikChart:CandlestickSeries.LowBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Low"/>
+                            </telerikChart:CandlestickSeries.LowBinding>
+                            <telerikChart:CandlestickSeries.OpenBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Open"/>
+                            </telerikChart:CandlestickSeries.OpenBinding>
+                            <telerikChart:CandlestickSeries.CloseBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Close"/>
+                            </telerikChart:CandlestickSeries.CloseBinding>
+                        </telerikChart:CandlestickSeries>
+                    </telerikChart:RadCartesianChart.Series>
 
-            <telerikChart:RadCartesianChart x:Name="secondChart" HorizontalAlignment="Right" Width="350" Height="350" Margin="40">
+                </telerikChart:RadCartesianChart>
 
-                <telerikChart:RadCartesianChart.VerticalAxis>
-                    <telerikChart:LinearAxis/>
-                </telerikChart:RadCartesianChart.VerticalAxis>
-                <telerikChart:RadCartesianChart.HorizontalAxis>
-                    <telerikChart:DateTimeCategoricalAxis LabelFormat="{}{0,0:dd/MM}"/>
-                </telerikChart:RadCartesianChart.HorizontalAxis>
+                <telerikChart:RadCartesianChart x:Name="secondChart" HorizontalAlignment="Right" Width="350" Height="350" Margin="40">
 
-                <telerikChart:RadCartesianChart.Indicators>
-                    <telerikChart:MacdhIndicator ItemsSource="{Binding}" ShortPeriod="2" SignalPeriod="4" LongPeriod="10">
-                        <telerikChart:MacdhIndicator.PointTemplate>
-                            <DataTemplate>
-                                <Rectangle Fill="#B45121" Stroke="#80D6F4"/>
-                            </DataTemplate>
-                        </telerikChart:MacdhIndicator.PointTemplate>
-                        <telerikChart:MacdhIndicator.ValueBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Close"/>
-                        </telerikChart:MacdhIndicator.ValueBinding>
-                        <telerikChart:MacdhIndicator.CategoryBinding>
-                            <telerikChart:PropertyNameDataPointBinding PropertyName="Date"/>
-                        </telerikChart:MacdhIndicator.CategoryBinding>
-                    </telerikChart:MacdhIndicator>
-                </telerikChart:RadCartesianChart.Indicators>
+                    <telerikChart:RadCartesianChart.VerticalAxis>
+                        <telerikChart:LinearAxis/>
+                    </telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:RadCartesianChart.HorizontalAxis>
+                        <telerikChart:DateTimeCategoricalAxis LabelFormat="{}{0,0:dd/MM}"/>
+                    </telerikChart:RadCartesianChart.HorizontalAxis>
 
-            </telerikChart:RadCartesianChart>
+                    <telerikChart:RadCartesianChart.Indicators>
+                        <telerikChart:MacdhIndicator ItemsSource="{Binding}" ShortPeriod="2" SignalPeriod="4" LongPeriod="10">
+                            <telerikChart:MacdhIndicator.PointTemplate>
+                                <DataTemplate>
+                                    <Rectangle Fill="#B45121" Stroke="#80D6F4"/>
+                                </DataTemplate>
+                            </telerikChart:MacdhIndicator.PointTemplate>
+                            <telerikChart:MacdhIndicator.ValueBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Close"/>
+                            </telerikChart:MacdhIndicator.ValueBinding>
+                            <telerikChart:MacdhIndicator.CategoryBinding>
+                                <telerikChart:PropertyNameDataPointBinding PropertyName="Date"/>
+                            </telerikChart:MacdhIndicator.CategoryBinding>
+                        </telerikChart:MacdhIndicator>
+                    </telerikChart:RadCartesianChart.Indicators>
+
+                </telerikChart:RadCartesianChart>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" >
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="Button_1_Day" Content="1 Day" Margin="50,10,10,0" Width="75"  Click="Button_1_Day_Click"/>
+                    <Button Name="Button_1_Month" Content="1 Month" Margin="0,10,10,0" Width="75" Click="Button_1_Month_Click"/>
+                    <Button Name="Button_3_Month" Content="3 Month" Margin="0,10,10,0" Width="75" Click="Button_3_Month_Click"/>
+                    <Button Name="Button_6_Month" Content="6 Month" Margin="0,10,10,0" Width="75" Click="Button_6_Month_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="Button_YTD" Content="YTD" Margin="50,10,10,0" Width="75" Click="Button_YTD_Click"/>
+                    <Button Name="Button_1_Year" Content="1 Year" Margin="0,10,10,0" Width="75" Click="Button_1_Year_Click"/>
+                    <Button Name="Button_2_Year" Content="2 Year" Margin="0,10,10,0" Width="75" Click="Button_2_Year_Click"/>
+                    <Button Name="Button_5_Year" Content="5 Year" Margin="0,10,10,0" Width="75" Click="Button_5_Year_Click"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" >
-            <StackPanel Orientation="Horizontal">
-                <Button Name="Button_1_Day" Content="1 Day" Margin="50,10,10,0" Width="75"  Click="Button_1_Day_Click"/>
-                <Button Name="Button_1_Month" Content="1 Month" Margin="0,10,10,0" Width="75" Click="Button_1_Month_Click"/>
-                <Button Name="Button_3_Month" Content="3 Month" Margin="0,10,10,0" Width="75" Click="Button_3_Month_Click"/>
-                <Button Name="Button_6_Month" Content="6 Month" Margin="0,10,10,0" Width="75" Click="Button_6_Month_Click"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Name="Button_YTD" Content="YTD" Margin="50,10,10,0" Width="75" Click="Button_YTD_Click"/>
-                <Button Name="Button_1_Year" Content="1 Year" Margin="0,10,10,0" Width="75" Click="Button_1_Year_Click"/>
-                <Button Name="Button_2_Year" Content="2 Year" Margin="0,10,10,0" Width="75" Click="Button_2_Year_Click"/>
-                <Button Name="Button_5_Year" Content="5 Year" Margin="0,10,10,0" Width="75" Click="Button_5_Year_Click"/>
-            </StackPanel>
-        </StackPanel>
+        
+        <SplitView Name="WatchListSplitView" Grid.Column="1" CompactPaneLength="10" OpenPaneLength="350" DisplayMode="Inline" PanePlacement="Right" >
+            <SplitView.Pane>
+                <StackPanel Name="WatchListPane">
+                    <TextBlock Text="Watch List" />
+                    <TextBlock Text="Two" />
+                    <TextBlock Text="Three" />
+                </StackPanel>
+            </SplitView.Pane>
 
-    </StackPanel>
+            <SplitView.Content>
+                <Grid Background="LightGray" Height="Auto" MaxWidth="30" HorizontalAlignment="Right">
+                    <Button Name="CollapseAndExpandWatchListButton" Foreground="Black" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="CollapseAndExpandWatchListButton_Click"/>
+                </Grid>
+            </SplitView.Content>
+            
+        </SplitView>
+  
+
+
+    </Grid>
 </Page>

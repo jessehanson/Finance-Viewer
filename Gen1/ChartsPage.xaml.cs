@@ -27,6 +27,8 @@ namespace Gen1
             this.InitializeComponent();
 
             GenerateChart("1m");
+
+            CollapseAndExpandWatchListButton.Content = "<";
         }
 
         private async void GenerateChart(string duration)
@@ -95,7 +97,12 @@ namespace Gen1
         private void Button_5_Year_Click(object sender, RoutedEventArgs e)
         { this.GenerateChart("5y"); }
 
-
-
+        private void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(WatchListSplitView.IsPaneOpen = !WatchListSplitView.IsPaneOpen)
+                CollapseAndExpandWatchListButton.Content = ">";
+            else
+                CollapseAndExpandWatchListButton.Content = "<";
+        }
     }
 }
