@@ -9,17 +9,22 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Background="Black">
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="50,20,0,20">
-            <Button Name="ChartsButton" Content="Charts" Margin="0,0,50,0" Width="120" Click="ChartsButton_Click"/>
-            <Button Name="FundamentalsButton" Content="Fundamentals" Margin="0,0,50,0" Width="120" Click="FundamentalsButton_Click"/>
-            <Button Name="StrategiesButton" Content="Strategies" Margin="0,0,50,0" Width="120" Click="StrategiesButton_Click"/>
-            <Button Name="NewsButton" Content="News" Margin="0,0,50,0" Width="120" Click="NewsButton_Click"/>
-            <Button Name="GoogleButton" Content="Google" Margin="0,0,50,0" Width="120" Click="GoogleButton_Click"/>
-        </StackPanel>
+        <RelativePanel  Margin="50,20,0,20" Grid.Row="0">
+            <Button Style="{StaticResource ButtonRoundEdges}" Name="ChartsButton" Content="Charts" Margin="0,0,50,0" Width="120" RelativePanel.AlignLeftWithPanel="True" Click="ChartsButton_Click"/>
+            <Button Style="{StaticResource ButtonRoundEdges}" Name="FundamentalsButton" Content="Fundamentals" Margin="0,0,50,0" Width="120" RelativePanel.RightOf="ChartsButton" Click="FundamentalsButton_Click"/>
+            <Button Style="{StaticResource ButtonRoundEdges}" Name="StrategiesButton" Content="Strategies" Margin="0,0,50,0" Width="120" RelativePanel.RightOf="FundamentalsButton" Click="StrategiesButton_Click"/>
+            <Button Style="{StaticResource ButtonRoundEdges}" Name="NewsButton" Content="News" Margin="0,0,50,0" Width="120" RelativePanel.RightOf="StrategiesButton" Click="NewsButton_Click"/>
+            <Button Style="{StaticResource ButtonRoundEdges}" Name="GoogleButton" Content="Google" Margin="0,0,50,0" Width="120" RelativePanel.RightOf="NewsButton" Click="GoogleButton_Click"/>
+            <Frame Name="MarketSummaryFrame" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" MinWidth="100" Margin="0,0,50,0"/>
+        </RelativePanel>
 
-        <Frame Name="LoadedFrame">
+        <Frame Name="LoadedFrame" Grid.Row="1">
             
         </Frame>
         
@@ -121,5 +126,5 @@
 
     -->
 
-    </StackPanel>
+    </Grid>
 </Page>
