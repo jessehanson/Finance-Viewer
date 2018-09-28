@@ -18,6 +18,10 @@ namespace Gen1
             string URI = String.Format("https://api.iextrading.com/1.0/stock/{0}/chart/{1}", ticker, duration);
             var response = await http.GetAsync(URI);
             var result = await response.Content.ReadAsStringAsync();
+
+            // remove all instances of null
+            //result = result.Replace("null", "0.0");
+
             var serializer = new DataContractJsonSerializer(typeof(List<RootObject>));
 
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(result));
@@ -26,6 +30,22 @@ namespace Gen1
             return data;
         }
 
+        public async static Task<List<OneDayData>> GetOneDayData(string ticker)
+        {
+            var http = new HttpClient();
+            string URI = String.Format("https://api.iextrading.com/1.0/stock/{0}/chart/1d", ticker);
+            var response = await http.GetAsync(URI);
+            var result = await response.Content.ReadAsStringAsync();
+
+            // remove all instances of null
+            result = result.Replace("null", "0.0");
+
+            var serializer = new DataContractJsonSerializer(typeof(List<OneDayData>));
+
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(result));
+
+            return (List<OneDayData>)serializer.ReadObject(ms);
+        }
     }
 
     [DataContract]
@@ -66,6 +86,72 @@ namespace Gen1
 
         [DataMember]
         public double changeOverTime { get; set; }
+    }
+
+    [DataContract]
+    public class OneDayData
+    {
+        public string date { get; set; }
+
+        [DataMember]
+        public string minute { get; set; }
+
+        [DataMember]
+        public string label { get; set; }
+
+        [DataMember]
+        public double high { get; set; }
+
+        [DataMember]
+        public double low { get; set; }
+
+        [DataMember]
+        public double average { get; set; }
+
+        [DataMember]
+        public int volume { get; set; }
+
+        [DataMember]
+        public double notional { get; set; }
+
+        [DataMember]
+        public int numberOfTrades { get; set; }
+
+        [DataMember]
+        public double marketHigh { get; set; }
+
+        [DataMember]
+        public double marketLow { get; set; }
+
+        [DataMember]
+        public double marketAverage { get; set; }
+
+        [DataMember]
+        public int marketVolume { get; set; }
+
+        [DataMember]
+        public double marketNotional { get; set; }
+
+        [DataMember]
+        public int marketNumberOfTrades { get; set; }
+
+        [DataMember]
+        public double open { get; set; }
+
+        [DataMember]
+        public double close { get; set; }
+
+        [DataMember]
+        public double marketOpen { get; set; }
+
+        [DataMember]
+        public double marketClose { get; set; }
+
+        [DataMember]
+        public double changeOverTime { get; set; }
+
+        [DataMember]
+        public double marketChangeOverTime { get; set; }
     }
 
     /* This is for the original IEX data way

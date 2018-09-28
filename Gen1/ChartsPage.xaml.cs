@@ -12,6 +12,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Gen1.Models;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Windows.UI;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,14 +27,34 @@ namespace Gen1
     /// </summary>
     public sealed partial class ChartsPage : Page
     {
+        // Class variables
+        private ObservableCollection<WatchListEntry> watchListEntries;
+
+
+        // Page Constructor
         public ChartsPage()
         {
             this.InitializeComponent();
-
             GenerateChart("1m");
-
             CollapseAndExpandWatchListButton.Content = "<";
+
+            watchListEntries = new ObservableCollection<WatchListEntry>();
         }
+
+        public async void AddEntry(string ticker)
+        {
+            List<OneDayData> stockData = await IEXDataProxy.GetOneDayData(ticker);
+
+            watchListEntries.Add(new WatchListEntry
+            {
+                Symbol = ticker.ToUpper(),
+                Price = String.Format("{0:0.##}", stockData[stockData.Count - 1].close),
+                PriceChange = String.Format("{0:0.##}", stockData[stockData.Count - 1].close - stockData[0].open),
+                PercentChange = String.Format("{0:0.##}", ((stockData[stockData.Count - 1].close - stockData[0].open) / stockData[0].open) * 100),
+                TotalVolume = String.Format("{0:0.#} K", stockData.Sum(item => item.volume) / 1000)
+            });
+        }
+
 
         private async void GenerateChart(string duration)
         {
@@ -97,12 +122,60 @@ namespace Gen1
         private void Button_5_Year_Click(object sender, RoutedEventArgs e)
         { this.GenerateChart("5y"); }
 
-        private void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
+        private async void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
         {
-            if(WatchListSplitView.IsPaneOpen = !WatchListSplitView.IsPaneOpen)
+            if (!WatchListSplitView.IsPaneOpen)
+            {
                 CollapseAndExpandWatchListButton.Content = ">";
+
+                // re-populate the watchlist with new data
+                // watchListEntries = await WatchListEntryManager.GetWatchListEntries();
+
+                WatchListSplitView.IsPaneOpen = true;
+            }
             else
+            {
                 CollapseAndExpandWatchListButton.Content = "<";
+                WatchListSplitView.IsPaneOpen = false;
+            }
+        }
+
+        private void UpdateWatchList_Click(object sender, RoutedEventArgs e)
+        {
+            watchListEntries[0].Price = "-99";
+        }
+
+        private void WatchListAddTickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            string ticker = TickerInput.Text.ToLower();
+
+            AddEntry(ticker);
+        }
+    }
+
+    public class ColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            double testValue;
+            if (double.TryParse(((WatchListEntry)value).PriceChange, out testValue))
+            {
+                if (testValue > 0.0)
+                    return new SolidColorBrush(Colors.Green);
+                else if (testValue == 0)
+                    return new SolidColorBrush(Colors.White);
+                else if (testValue < 0.0)
+                    return new SolidColorBrush(Colors.Red);
+                else
+                    throw new Exception();
+            }
+            else
+                throw new Exception();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new Exception();
         }
     }
 }
