@@ -39,7 +39,7 @@ namespace Gen1
         public ChartsPage()
         {
             this.InitializeComponent();
-            GenerateChart("1m");
+
             CollapseAndExpandWatchListButton.Content = "<";
 
             watchListEntries = new ObservableCollection<WatchListEntry>();
@@ -67,8 +67,8 @@ namespace Gen1
             this.OhlcChart.DataContext = "";
             this.secondChart.DataContext = "";
 
-            if (ticker == "void")
-                ticker = ((ComboBoxItem)this.TickerSelector.SelectedItem).Content.ToString().ToLower();
+            // if (ticker == "void")
+            //    ticker = ((ComboBoxItem)this.TickerSelector.SelectedItem).Content.ToString().ToLower();
 
             List<FinancialData> newData = new List<FinancialData>();
             List<RootObject> stockData = await IEXDataProxy.GetData(duration, ticker);
@@ -104,7 +104,7 @@ namespace Gen1
             this.OhlcChart.DataContext = newData;
             this.secondChart.DataContext = newData;
         }
-
+        /*
         private void Button_1_Day_Click(object sender, RoutedEventArgs e)
         { this.GenerateChart("1d"); }
 
@@ -128,8 +128,9 @@ namespace Gen1
 
         private void Button_5_Year_Click(object sender, RoutedEventArgs e)
         { this.GenerateChart("5y"); }
+        */
 
-        private async void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
+        private void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
         {
             if (!WatchListSplitView.IsPaneOpen)
             {
@@ -167,6 +168,8 @@ namespace Gen1
             var watchListEntry = (WatchListEntry)e.ClickedItem;
 
             this.GenerateChart("1m", watchListEntry.Symbol.ToLower());
+
+            ChartTickerInput.Text = watchListEntry.Symbol.ToUpper();
 
             foreach (var item in WatchListListView.Items)
             {
@@ -229,6 +232,72 @@ namespace Gen1
             }
 
             watchListEntries.Clear();
+        }
+
+        private void Chart1D_Click(object sender, RoutedEventArgs e)
+        {
+            if(!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("1d", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart5D_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("5d", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart1M_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("1m", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart3M_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("3m", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart6M_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("6m", ChartTickerInput.Text.ToLower());
+        }
+
+        private void ChartYTD_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("ytd", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart1Y_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("1y", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart2Y_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("2y", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart5Y_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("5y", ChartTickerInput.Text.ToLower());
+        }
+
+        private void ChartDynamic_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("dynamic", ChartTickerInput.Text.ToLower());
+        }
+
+        private void LoadChart_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("5d", ChartTickerInput.Text.ToLower());
         }
     }
 
