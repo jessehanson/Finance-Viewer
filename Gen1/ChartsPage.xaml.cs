@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Windows.UI;
+using Gen1;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,6 +30,9 @@ namespace Gen1
     {
         // Class variables
         private ObservableCollection<WatchListEntry> watchListEntries;
+        public static string watchListHighlightedEntry;
+        Color WatchListBackgroundColor = Colors.Black;
+        Color WatchListSelectionColor = Colors.DarkGray;
 
 
         // Page Constructor
@@ -39,6 +43,8 @@ namespace Gen1
             CollapseAndExpandWatchListButton.Content = "<";
 
             watchListEntries = new ObservableCollection<WatchListEntry>();
+
+            watchListHighlightedEntry = "";
         }
 
         public async void AddEntry(string ticker)
@@ -151,6 +157,59 @@ namespace Gen1
 
             AddEntry(ticker);
         }
+
+        private void WatchListListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var watchListEntry = (WatchListEntry)e.ClickedItem;
+
+            foreach (var item in WatchListListView.Items)
+            {
+                var watchListItem = item as WatchListEntry;
+                var container = WatchListListView.ContainerFromItem(watchListItem) as ListViewItem;
+                var ItemGridView = container.ContentTemplateRoot as Grid;
+
+                if (watchListItem.Symbol.ToLower() == watchListEntry.Symbol.ToLower())
+                {
+                    SolidColorBrush brush = ItemGridView.Background as SolidColorBrush;
+                    if (brush != null)
+                    {
+                        if (brush.Color == WatchListSelectionColor)
+                            ItemGridView.Background = null;
+                        else
+                            ItemGridView.Background = new SolidColorBrush(WatchListSelectionColor);
+                    }
+                    else
+                        ItemGridView.Background = new SolidColorBrush(WatchListSelectionColor);
+                }
+                else
+                    ItemGridView.Background = null;
+            }
+        }
+
+        private void RemoveWatchListSelection_Click(object sender, RoutedEventArgs e)
+        {
+            WatchListEntry entryToBeRemoved = null;
+
+            foreach (var item in WatchListListView.Items)
+            {
+                var watchListItem = item as WatchListEntry;
+                var container = WatchListListView.ContainerFromItem(watchListItem) as ListViewItem;
+                var ItemGridView = container.ContentTemplateRoot as Grid;
+
+                SolidColorBrush brush = ItemGridView.Background as SolidColorBrush;
+                if (brush != null)
+                {
+                    if(brush.Color == WatchListSelectionColor)
+                    {
+                        ItemGridView.Background = null;
+                        entryToBeRemoved = watchListItem;
+                    }
+                }
+            }
+
+            if (entryToBeRemoved != null)
+                watchListEntries.Remove(entryToBeRemoved);
+        }
     }
 
     public class ColorConverter : IValueConverter
@@ -178,4 +237,23 @@ namespace Gen1
             throw new Exception();
         }
     }
+
+    /*
+    public class BackgroundConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (((WatchListEntry)value).Symbol.ToLower() == ChartsPage.watchListHighlightedEntry[0].ToLower())
+                return new SolidColorBrush(Colors.Pink);
+            else
+                return new SolidColorBrush(Colors.Black);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new Exception();
+        }
+    }
+    */
 }
+

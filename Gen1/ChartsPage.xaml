@@ -12,6 +12,9 @@
 
     <Page.Resources>
         <local:ColorConverter x:Key="ColorConverter" />
+        <!--
+        <local:BackgroundConverter x:Key="BackgroundConverter" />
+        -->
     </Page.Resources>
 
     <Grid Background="Black">
@@ -123,80 +126,92 @@
         </StackPanel>
 
 
-        <SplitView Name="WatchListSplitView" Grid.Column="1" CompactPaneLength="10" OpenPaneLength="Auto" DisplayMode="Inline" PanePlacement="Right" >
+        <SplitView Name="WatchListSplitView" Grid.Column="1" CompactPaneLength="10" OpenPaneLength="400" DisplayMode="Inline" PanePlacement="Right" >
             <SplitView.Pane>
-                <StackPanel Name="WatchListPane" Orientation="Vertical">
+                <Grid>
+                    <StackPanel Name="WatchListPane" Orientation="Vertical">
                     
-                    <Grid Background="DarkGray" >
-                        <TextBlock Text="Watch List" Foreground="Black" Padding="10,3,0,3" FontWeight="Bold"/>
-                    </Grid>
-                    <Grid Height="2" Background="White" />
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBlock Text="Add Category:" Padding="10,3,0,3" Margin="0,5,10,5"/>
-                        <TextBox Width="150" Margin="0,5,0,5"/>
-                        <Button Name="WatchListAddCategoryButton" Content="+" Margin="10,0,0,0"  />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Add Ticker:" Padding="10,3,0,3" Margin="0,5,10,5"/>
-                        <TextBox Name="TickerInput" Width="100" Margin="0,5,0,5"/>
-                        <TextBlock Text="To" Padding="10,3,0,3" Margin="0,5,10,5"/>
-                        <ComboBox Name="CategorySelector" Margin="0,5,0,0" Width="125" >
-                            <ComboBoxItem Content="MSFT" IsSelected="True"/>
-                            <ComboBoxItem Content="AAPL" />
-                            <ComboBoxItem Content="NKE" />
-                            <ComboBoxItem Content="NFLX" />
-                        </ComboBox>
-                        <Button Name="WatchListAddTickerButton" Content="+" Margin="10,0,0,0" Click="WatchListAddTickerButton_Click"/>
-                    </StackPanel>
-                    <Grid Height="2" Background="White" />
+                        <Grid Background="DarkGray" >
+                            <TextBlock Text="Watch List" Foreground="Black" Padding="10,3,0,3" FontWeight="Bold"/>
+                        </Grid>
+                        <Grid Height="2" Background="White" />
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="Add Category:" Padding="10,3,0,3" Margin="0,5,10,5"/>
+                            <TextBox Width="150" Margin="0,5,0,5"/>
+                            <Button Name="WatchListAddCategoryButton" Content="+" Margin="10,0,0,0"  />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Add Ticker:" Padding="10,3,0,3" Margin="0,5,10,5"/>
+                            <TextBox Name="TickerInput" Width="100" Margin="0,5,0,5"/>
+                            <TextBlock Text="To" Padding="10,3,0,3" Margin="0,5,10,5"/>
+                            <ComboBox Name="CategorySelector" Margin="0,5,0,0" Width="125" >
+                                <ComboBoxItem Content="MSFT" IsSelected="True"/>
+                                <ComboBoxItem Content="AAPL" />
+                                <ComboBoxItem Content="NKE" />
+                                <ComboBoxItem Content="NFLX" />
+                            </ComboBox>
+                            <Button Name="WatchListAddTickerButton" Content="+" Margin="10,0,0,0" Click="WatchListAddTickerButton_Click"/>
+                        </StackPanel>
+                        <Grid Height="2" Background="White" />
                     
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="1" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="1" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Symbol" TextAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="Price" TextAlignment="Center" />
-                        <TextBlock Grid.Column="2" Text="$ Change" TextAlignment="Center" />
-                        <TextBlock Grid.Column="3" Text="% Change" TextAlignment="Center" />
-                        <TextBlock Grid.Column="4" Text="Total Vol."  TextAlignment="Center" />
-                        <Grid Grid.Row="1" Grid.ColumnSpan="5" Height="2" Background="White" />
+                            <TextBlock Grid.Column="0" Text="Symbol" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Price" TextAlignment="Center" />
+                            <TextBlock Grid.Column="2" Text="$ Change" TextAlignment="Center" />
+                            <TextBlock Grid.Column="3" Text="% Change" TextAlignment="Center" />
+                            <TextBlock Grid.Column="4" Text="Total Vol."  TextAlignment="Center" />
+                            <Grid Grid.Row="1" Grid.ColumnSpan="5" Height="2" Background="White" />
 
-                        <ListView Name="WatchListListView" Grid.Row="2" Grid.ColumnSpan="5" ItemsSource="{x:Bind watchListEntries, Mode=OneWay}" >
-                            <ListView.ItemTemplate>
-                                <DataTemplate x:Name="WatchListDataTemplate" x:DataType="data:WatchListEntry">
-                                    <Grid Width="400">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
+                            <ListView x:Name="WatchListListView" Grid.Row="2" Grid.ColumnSpan="5" ItemsSource="{x:Bind watchListEntries, Mode=OneWay}" IsItemClickEnabled="True" ItemClick="WatchListListView_ItemClick">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:Name="WatchListDataTemplate" x:DataType="data:WatchListEntry" >
+                                        <Grid Width="400">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0" Text="{x:Bind Symbol, Mode=OneWay}" TextAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="{x:Bind Price, Mode=OneWay}" TextAlignment="Center"/>
-                                        <TextBlock Grid.Column="2" x:Name="PriceChange" Text="{x:Bind PriceChange, Mode=OneWay}" Foreground="{x:Bind Converter={StaticResource ResourceKey=ColorConverter}}" TextAlignment="Center"/>
-                                        <TextBlock Grid.Column="3" x:Name="PercentChange" Text="{x:Bind PercentChange, Mode=OneWay}" Foreground="{x:Bind Converter={StaticResource ResourceKey=ColorConverter}}" TextAlignment="Center"/>
-                                        <TextBlock Grid.Column="4" Text="{x:Bind TotalVolume, Mode=OneWay}" TextAlignment="Right"/>
+                                            <TextBlock Grid.Column="0" Text="{x:Bind Symbol, Mode=OneWay}" TextAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="{x:Bind Price, Mode=OneWay}" TextAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" x:Name="PriceChange" Text="{x:Bind PriceChange, Mode=OneWay}" Foreground="{x:Bind Converter={StaticResource ResourceKey=ColorConverter}}" TextAlignment="Center"/>
+                                            <TextBlock Grid.Column="3" x:Name="PercentChange" Text="{x:Bind PercentChange, Mode=OneWay}" Foreground="{x:Bind Converter={StaticResource ResourceKey=ColorConverter}}" TextAlignment="Center"/>
+                                            <TextBlock Grid.Column="4" Text="{x:Bind TotalVolume, Mode=OneWay}" TextAlignment="Right"/>
 
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <!--
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem" >
+                                        <Setter Property="Background" Value="{Binding Converter={StaticResource ResourceKey=BackgroundConverter}}" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                -->
+                            </ListView>
+                        </Grid>
 
-                    </Grid>
+                    
 
-                </StackPanel>
+                    </StackPanel>
+
+                    <Button Content="Remove Ticker" Name="RemoveWatchListSelection" VerticalAlignment="Bottom" Margin="10,0,0,10" Click="RemoveWatchListSelection_Click" />
+                </Grid>
             </SplitView.Pane>
 
             <SplitView.Content>
