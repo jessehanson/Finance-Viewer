@@ -208,7 +208,11 @@
 
                     </StackPanel>
 
-                    <Button Content="Remove Ticker" Name="RemoveWatchListSelection" VerticalAlignment="Bottom" Margin="10,0,0,10" Click="RemoveWatchListSelection_Click" />
+                    <RelativePanel VerticalAlignment="Bottom">
+                        <Button Content="Remove Ticker" Name="RemoveWatchListSelection" Margin="10,0,0,10" Click="RemoveWatchListSelection_Click" />
+                        <Button Content="Clear Watch List" Name="ClearWatchList" VerticalAlignment="Bottom" RelativePanel.RightOf="RemoveWatchListSelection" Margin="10,0,0,10" Click="ClearWatchList_Click"/>
+                    </RelativePanel>
+                    
                 </Grid>
             </SplitView.Pane>
 

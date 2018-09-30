@@ -205,6 +205,20 @@ namespace Gen1
             if (entryToBeRemoved != null)
                 watchListEntries.Remove(entryToBeRemoved);
         }
+
+        private void ClearWatchList_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in WatchListListView.Items)
+            {
+                var watchListItem = item as WatchListEntry;
+                var container = WatchListListView.ContainerFromItem(watchListItem) as ListViewItem;
+                var ItemGridView = container.ContentTemplateRoot as Grid;
+
+                ItemGridView.Background = null;
+            }
+
+            watchListEntries.Clear();
+        }
     }
 
     public class ColorConverter : IValueConverter
