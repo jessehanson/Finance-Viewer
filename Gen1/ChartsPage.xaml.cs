@@ -146,11 +146,6 @@ namespace Gen1
             }
         }
 
-        private void UpdateWatchList_Click(object sender, RoutedEventArgs e)
-        {
-            watchListEntries[0].Price = "-99";
-        }
-
         private void WatchListAddTickerButton_Click(object sender, RoutedEventArgs e)
         {
             string ticker = TickerInput.Text.ToLower();

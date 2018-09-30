@@ -36,8 +36,6 @@
                 <ComboBoxItem Content="NFLX" />
             </ComboBox>
 
-            <Button Name="UpdateWatchList" Content="Update Watch List" Click="UpdateWatchList_Click" />
-
             <StackPanel Orientation="Horizontal">
                 <telerikChart:RadCartesianChart x:Name="OhlcChart" Width="350" Height="350" PaletteName="DefaultLightSelected" HorizontalAlignment="Left" Margin="40">
 
