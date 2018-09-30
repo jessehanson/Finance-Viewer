@@ -62,12 +62,13 @@ namespace Gen1
         }
 
 
-        private async void GenerateChart(string duration)
+        private async void GenerateChart(string duration, string ticker = "void")
         {
             this.OhlcChart.DataContext = "";
             this.secondChart.DataContext = "";
 
-            string ticker = ((ComboBoxItem)this.TickerSelector.SelectedItem).Content.ToString().ToLower();
+            if (ticker == "void")
+                ticker = ((ComboBoxItem)this.TickerSelector.SelectedItem).Content.ToString().ToLower();
 
             List<FinancialData> newData = new List<FinancialData>();
             List<RootObject> stockData = await IEXDataProxy.GetData(duration, ticker);
@@ -149,13 +150,23 @@ namespace Gen1
         private void WatchListAddTickerButton_Click(object sender, RoutedEventArgs e)
         {
             string ticker = TickerInput.Text.ToLower();
+            bool found = false;
 
-            AddEntry(ticker);
+            foreach (var item in watchListEntries)
+            {
+                if (item.Symbol.ToLower() == ticker)
+                    found = true;
+            }
+
+            if (!found)
+                AddEntry(ticker);
         }
 
         private void WatchListListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var watchListEntry = (WatchListEntry)e.ClickedItem;
+
+            this.GenerateChart("1m", watchListEntry.Symbol.ToLower());
 
             foreach (var item in WatchListListView.Items)
             {

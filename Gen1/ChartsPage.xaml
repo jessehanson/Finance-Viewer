@@ -124,10 +124,15 @@
         </StackPanel>
 
 
-        <SplitView Name="WatchListSplitView" Grid.Column="1" CompactPaneLength="10" OpenPaneLength="400" DisplayMode="Inline" PanePlacement="Right" >
+        <SplitView Name="WatchListSplitView" Grid.Column="1" CompactPaneLength="10" OpenPaneLength="400" DisplayMode="Inline" PanePlacement="Right" IsPaneOpen="True">
             <SplitView.Pane>
                 <Grid>
-                    <StackPanel Name="WatchListPane" Orientation="Vertical">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Name="WatchListPane" Orientation="Vertical" Grid.Row="0">
                     
                         <Grid Background="DarkGray" >
                             <TextBlock Text="Watch List" Foreground="Black" Padding="10,3,0,3" FontWeight="Bold"/>
@@ -189,7 +194,7 @@
                                             <TextBlock Grid.Column="1" Text="{x:Bind Price, Mode=OneWay}" TextAlignment="Center"/>
                                             <TextBlock Grid.Column="2" x:Name="PriceChange" Text="{x:Bind PriceChange, Mode=OneWay}" Foreground="{x:Bind Converter={StaticResource ResourceKey=ColorConverter}}" TextAlignment="Center"/>
                                             <TextBlock Grid.Column="3" x:Name="PercentChange" Text="{x:Bind PercentChange, Mode=OneWay}" Foreground="{x:Bind Converter={StaticResource ResourceKey=ColorConverter}}" TextAlignment="Center"/>
-                                            <TextBlock Grid.Column="4" Text="{x:Bind TotalVolume, Mode=OneWay}" TextAlignment="Right"/>
+                                            <TextBlock Grid.Column="4" Text="{x:Bind TotalVolume, Mode=OneWay}" TextAlignment="Left"/>
 
                                         </Grid>
                                     </DataTemplate>
@@ -208,10 +213,10 @@
 
                     </StackPanel>
 
-                    <RelativePanel VerticalAlignment="Bottom">
-                        <Button Content="Remove Ticker" Name="RemoveWatchListSelection" Margin="10,0,0,10" Click="RemoveWatchListSelection_Click" />
-                        <Button Content="Clear Watch List" Name="ClearWatchList" VerticalAlignment="Bottom" RelativePanel.RightOf="RemoveWatchListSelection" Margin="10,0,0,10" Click="ClearWatchList_Click"/>
-                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Bottom" Grid.Row="1">
+                        <Button Content="Remove Ticker" Name="RemoveWatchListSelection" Margin="10,10,0,10" Click="RemoveWatchListSelection_Click" />
+                        <Button Content="Clear Watch List" Name="ClearWatchList" VerticalAlignment="Bottom" RelativePanel.RightOf="RemoveWatchListSelection" Margin="10,10,0,10" Click="ClearWatchList_Click"/>
+                    </RelativePanel> 
                     
                 </Grid>
             </SplitView.Pane>
