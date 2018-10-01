@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Windows.UI;
+using Gen1;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,16 +30,21 @@ namespace Gen1
     {
         // Class variables
         private ObservableCollection<WatchListEntry> watchListEntries;
+        public static string watchListHighlightedEntry;
+        Color WatchListBackgroundColor = Colors.Black;
+        Color WatchListSelectionColor = Colors.DarkGray;
 
 
         // Page Constructor
         public ChartsPage()
         {
             this.InitializeComponent();
-            GenerateChart("1m");
+
             CollapseAndExpandWatchListButton.Content = "<";
 
             watchListEntries = new ObservableCollection<WatchListEntry>();
+
+            watchListHighlightedEntry = "";
         }
 
         public async void AddEntry(string ticker)
@@ -56,12 +62,13 @@ namespace Gen1
         }
 
 
-        private async void GenerateChart(string duration)
+        private async void GenerateChart(string duration, string ticker = "void")
         {
             this.OhlcChart.DataContext = "";
             this.secondChart.DataContext = "";
 
-            string ticker = ((ComboBoxItem)this.TickerSelector.SelectedItem).Content.ToString().ToLower();
+            // if (ticker == "void")
+            //    ticker = ((ComboBoxItem)this.TickerSelector.SelectedItem).Content.ToString().ToLower();
 
             List<FinancialData> newData = new List<FinancialData>();
             List<RootObject> stockData = await IEXDataProxy.GetData(duration, ticker);
@@ -97,7 +104,7 @@ namespace Gen1
             this.OhlcChart.DataContext = newData;
             this.secondChart.DataContext = newData;
         }
-
+        /*
         private void Button_1_Day_Click(object sender, RoutedEventArgs e)
         { this.GenerateChart("1d"); }
 
@@ -121,8 +128,9 @@ namespace Gen1
 
         private void Button_5_Year_Click(object sender, RoutedEventArgs e)
         { this.GenerateChart("5y"); }
+        */
 
-        private async void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
+        private void CollapseAndExpandWatchListButton_Click(object sender, RoutedEventArgs e)
         {
             if (!WatchListSplitView.IsPaneOpen)
             {
@@ -140,16 +148,156 @@ namespace Gen1
             }
         }
 
-        private void UpdateWatchList_Click(object sender, RoutedEventArgs e)
-        {
-            watchListEntries[0].Price = "-99";
-        }
-
         private void WatchListAddTickerButton_Click(object sender, RoutedEventArgs e)
         {
             string ticker = TickerInput.Text.ToLower();
+            bool found = false;
 
-            AddEntry(ticker);
+            foreach (var item in watchListEntries)
+            {
+                if (item.Symbol.ToLower() == ticker)
+                    found = true;
+            }
+
+            if (!found)
+                AddEntry(ticker);
+        }
+
+        private void WatchListListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var watchListEntry = (WatchListEntry)e.ClickedItem;
+
+            this.GenerateChart("1m", watchListEntry.Symbol.ToLower());
+
+            ChartTickerInput.Text = watchListEntry.Symbol.ToUpper();
+
+            foreach (var item in WatchListListView.Items)
+            {
+                var watchListItem = item as WatchListEntry;
+                var container = WatchListListView.ContainerFromItem(watchListItem) as ListViewItem;
+                var ItemGridView = container.ContentTemplateRoot as Grid;
+
+                if (watchListItem.Symbol.ToLower() == watchListEntry.Symbol.ToLower())
+                {
+                    SolidColorBrush brush = ItemGridView.Background as SolidColorBrush;
+                    if (brush != null)
+                    {
+                        if (brush.Color == WatchListSelectionColor)
+                            ItemGridView.Background = null;
+                        else
+                            ItemGridView.Background = new SolidColorBrush(WatchListSelectionColor);
+                    }
+                    else
+                        ItemGridView.Background = new SolidColorBrush(WatchListSelectionColor);
+                }
+                else
+                    ItemGridView.Background = null;
+            }
+        }
+
+        private void RemoveWatchListSelection_Click(object sender, RoutedEventArgs e)
+        {
+            WatchListEntry entryToBeRemoved = null;
+
+            foreach (var item in WatchListListView.Items)
+            {
+                var watchListItem = item as WatchListEntry;
+                var container = WatchListListView.ContainerFromItem(watchListItem) as ListViewItem;
+                var ItemGridView = container.ContentTemplateRoot as Grid;
+
+                SolidColorBrush brush = ItemGridView.Background as SolidColorBrush;
+                if (brush != null)
+                {
+                    if(brush.Color == WatchListSelectionColor)
+                    {
+                        ItemGridView.Background = null;
+                        entryToBeRemoved = watchListItem;
+                    }
+                }
+            }
+
+            if (entryToBeRemoved != null)
+                watchListEntries.Remove(entryToBeRemoved);
+        }
+
+        private void ClearWatchList_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in WatchListListView.Items)
+            {
+                var watchListItem = item as WatchListEntry;
+                var container = WatchListListView.ContainerFromItem(watchListItem) as ListViewItem;
+                var ItemGridView = container.ContentTemplateRoot as Grid;
+
+                ItemGridView.Background = null;
+            }
+
+            watchListEntries.Clear();
+        }
+
+        private void Chart1D_Click(object sender, RoutedEventArgs e)
+        {
+            if(!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("1d", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart5D_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("5d", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart1M_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("1m", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart3M_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("3m", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart6M_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("6m", ChartTickerInput.Text.ToLower());
+        }
+
+        private void ChartYTD_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("ytd", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart1Y_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("1y", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart2Y_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("2y", ChartTickerInput.Text.ToLower());
+        }
+
+        private void Chart5Y_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("5y", ChartTickerInput.Text.ToLower());
+        }
+
+        private void ChartDynamic_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("dynamic", ChartTickerInput.Text.ToLower());
+        }
+
+        private void LoadChart_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ChartTickerInput.Text))
+                this.GenerateChart("5d", ChartTickerInput.Text.ToLower());
         }
     }
 
@@ -178,4 +326,23 @@ namespace Gen1
             throw new Exception();
         }
     }
+
+    /*
+    public class BackgroundConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (((WatchListEntry)value).Symbol.ToLower() == ChartsPage.watchListHighlightedEntry[0].ToLower())
+                return new SolidColorBrush(Colors.Pink);
+            else
+                return new SolidColorBrush(Colors.Black);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new Exception();
+        }
+    }
+    */
 }
+
